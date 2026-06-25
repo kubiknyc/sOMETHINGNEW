@@ -50,6 +50,36 @@ EAS runs the native build in the cloud and gives you a download link / QR code �
 no local Android SDK or Xcode needed. For day-to-day development, `npx expo start`
 with Expo Go (above) is faster and needs no build.
 
+### Get it onto an iPhone with no computer (paid Apple Developer account)
+
+Builds run in the cloud via the **iOS build (EAS)** GitHub Action, so you can
+trigger everything from the GitHub website on your phone, then install through
+Apple's **TestFlight** app.
+
+One-time setup (all doable in a phone browser):
+
+1. Create a free account at **expo.dev**.
+2. On expo.dev, create an **access token** (Account → Settings → Access Tokens).
+   In the GitHub repo, add it as a secret: **Settings → Secrets and variables →
+   Actions → New repository secret**, named `EXPO_TOKEN`.
+3. Give EAS your Apple signing credentials so it can build and upload without a
+   Mac: in the Apple Developer portal create an **App Store Connect API key**,
+   then add it under the Expo project's **Credentials → iOS** (EAS will then
+   manage the distribution certificate, provisioning profile, and TestFlight
+   upload automatically).
+
+Each build:
+
+1. GitHub repo → **Actions** tab → **iOS build (EAS)** → **Run workflow**
+   (profile `production`, submit ✓).
+2. Wait for it to finish (~10–20 min); it uploads to TestFlight.
+3. Install **TestFlight** from the App Store, open it, and install **Site
+   Materials**.
+
+Prefer no TestFlight review wait? Run the workflow with profile `preview` for a
+direct-install build — you'll register your device once (EAS provides a link)
+and install the `.ipa` straight from the EAS build page.
+
 ## Tests
 
 ```bash
