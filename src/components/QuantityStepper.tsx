@@ -7,7 +7,10 @@ type Props = {
   onChange: (next: number) => void;
 };
 
-/** A +/- stepper with an editable number in the middle. Min value 1. */
+/**
+ * A +/- stepper with an editable number in the middle for entering an item
+ * quantity. Clamps to a minimum of 1.
+ */
 export function QuantityStepper({ value, onChange }: Props) {
   const dec = () => onChange(Math.max(1, value - 1));
   const inc = () => onChange(value + 1);

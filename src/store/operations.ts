@@ -21,6 +21,7 @@ export function buildItem(input: NewItem, id: string): MaterialItem | null {
   };
 }
 
+/** Create an empty list, defaulting a blank name to "Untitled list". */
 export function buildList(name: string, id: string, now: number): MaterialList {
   return {
     id,
@@ -36,6 +37,7 @@ export function prependList(lists: MaterialList[], list: MaterialList): Material
   return [list, ...lists];
 }
 
+/** Rename a list; a blank name is ignored and the existing name kept. */
 export function renameList(
   lists: MaterialList[],
   id: string,
@@ -47,6 +49,7 @@ export function renameList(
   );
 }
 
+/** Remove a list by id. */
 export function deleteList(lists: MaterialList[], id: string): MaterialList[] {
   return lists.filter((l) => l.id !== id);
 }
@@ -63,6 +66,7 @@ function mapItems(
   );
 }
 
+/** Append an item to the end of a list. */
 export function addItem(
   lists: MaterialList[],
   listId: string,
@@ -72,6 +76,7 @@ export function addItem(
   return mapItems(lists, listId, now, (items) => [...items, item]);
 }
 
+/** Merge a partial patch into a single item. */
 export function updateItem(
   lists: MaterialList[],
   listId: string,
@@ -84,6 +89,7 @@ export function updateItem(
   );
 }
 
+/** Flip an item's "got it" checked state. */
 export function toggleItem(
   lists: MaterialList[],
   listId: string,
@@ -95,6 +101,7 @@ export function toggleItem(
   );
 }
 
+/** Remove an item from a list by id. */
 export function deleteItem(
   lists: MaterialList[],
   listId: string,

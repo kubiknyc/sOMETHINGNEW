@@ -18,6 +18,10 @@ import { exportListPdf, shareList } from '../../src/share';
 import { colors, radius, spacing } from '../../src/theme';
 import type { MaterialItem } from '../../src/types';
 
+/**
+ * Detail screen for one list: add items, check them off, edit/delete an item,
+ * and share or export the list. Checked items sort to the bottom.
+ */
 export default function ListDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const listId = String(id);
@@ -185,6 +189,7 @@ export default function ListDetailScreen() {
   );
 }
 
+/** Modal for editing an item's name, quantity, unit and note, or deleting it. */
 function EditItemModal({
   item,
   onClose,

@@ -20,6 +20,7 @@ export function listToText(list: MaterialList): string {
   return `${header}\n${rule}\n${lines.join('\n')}\n${footer}`;
 }
 
+/** Escape &, < and > so user-entered text can't inject markup into the PDF. */
 export function escapeHtml(s: string): string {
   return s
     .replace(/&/g, '&amp;')

@@ -4,6 +4,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ListsProvider } from '../src/store/ListsProvider';
 import { colors } from '../src/theme';
 
+/** Root navigator; wraps every screen in the gesture root and lists store. */
 export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

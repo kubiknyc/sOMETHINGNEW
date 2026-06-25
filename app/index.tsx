@@ -14,6 +14,7 @@ import { useLists } from '../src/store/ListsProvider';
 import { colors, radius, spacing } from '../src/theme';
 import type { MaterialList } from '../src/types';
 
+/** Home screen: shows every materials list and lets the user add or delete one. */
 export default function ListsScreen() {
   const { lists, loading, createList, deleteList } = useLists();
   const router = useRouter();

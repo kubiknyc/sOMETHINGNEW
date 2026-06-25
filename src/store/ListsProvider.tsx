@@ -28,10 +28,15 @@ type ListsContextValue = {
 
 const ListsContext = createContext<ListsContextValue | null>(null);
 
+/** Generate a unique id for a new list or item. */
 function uid(): string {
   return Crypto.randomUUID();
 }
 
+/**
+ * App-wide store for materials lists. Hydrates from device storage on mount and
+ * persists every change back to it, exposing list/item actions via context.
+ */
 export function ListsProvider({ children }: { children: React.ReactNode }) {
   const [lists, setLists] = useState<MaterialList[]>([]);
   const [loading, setLoading] = useState(true);
@@ -128,6 +133,7 @@ export function ListsProvider({ children }: { children: React.ReactNode }) {
   return <ListsContext.Provider value={value}>{children}</ListsContext.Provider>;
 }
 
+/** Access the lists store. Must be called within a {@link ListsProvider}. */
 export function useLists(): ListsContextValue {
   const ctx = useContext(ListsContext);
   if (!ctx) {
