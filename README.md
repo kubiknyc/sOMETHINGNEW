@@ -28,6 +28,16 @@ Then open it on your phone:
 Or press `a` for an Android emulator / `i` for an iOS simulator if you have one
 set up. `npm run android` / `npm run ios` do the same.
 
+## Tests
+
+```bash
+npm test
+```
+
+Unit tests (Jest) cover the pure logic — text/PDF formatting (`src/format.ts`)
+and the list/item operations (`src/store/operations.ts`). These modules have no
+React Native / Expo imports, so the suite runs fast in a plain node environment.
+
 ## How it's built
 
 ```
@@ -37,13 +47,16 @@ app/
   list/[id].tsx     List detail — add items, check off, edit, share
 src/
   types.ts          MaterialList / MaterialItem types
+  format.ts         Pure text / HTML formatting (unit-tested)
   store/
     storage.ts      AsyncStorage read/write (single JSON blob)
+    operations.ts   Pure list/item transforms (unit-tested)
     ListsProvider.tsx  React Context store; persists on every change
   share.ts          Plain-text + PDF (expo-print) export helpers
   components/
     QuantityStepper.tsx  +/- quantity control
   theme.ts          Colors / spacing (high contrast for outdoor use)
+  __tests__/        Jest tests for format.ts and operations.ts
 ```
 
 Data lives under the AsyncStorage key `@site-materials/lists`. Editing is

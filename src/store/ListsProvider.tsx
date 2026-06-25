@@ -9,14 +9,9 @@ import React, {
   useState,
 } from 'react';
 import type { MaterialItem, MaterialList } from '../types';
+import * as ops from './operations';
+import type { NewItem } from './operations';
 import { loadLists, saveLists } from './storage';
-
-type NewItem = {
-  name: string;
-  quantity?: number;
-  unit?: string;
-  note?: string;
-};
 
 type ListsContextValue = {
   lists: MaterialList[];
@@ -69,98 +64,38 @@ export function ListsProvider({ children }: { children: React.ReactNode }) {
   );
 
   const createList = useCallback((name: string) => {
-    const now = Date.now();
-    const list: MaterialList = {
-      id: uid(),
-      name: name.trim() || 'Untitled list',
-      items: [],
-      createdAt: now,
-      updatedAt: now,
-    };
-    setLists((prev) => [list, ...prev]);
+    const list = ops.buildList(name, uid(), Date.now());
+    setLists((prev) => ops.prependList(prev, list));
     return list;
   }, []);
 
   const renameList = useCallback((id: string, name: string) => {
-    setLists((prev) =>
-      prev.map((l) =>
-        l.id === id
-          ? { ...l, name: name.trim() || l.name, updatedAt: Date.now() }
-          : l,
-      ),
-    );
+    setLists((prev) => ops.renameList(prev, id, name, Date.now()));
   }, []);
 
   const deleteList = useCallback((id: string) => {
-    setLists((prev) => prev.filter((l) => l.id !== id));
+    setLists((prev) => ops.deleteList(prev, id));
   }, []);
 
   const addItem = useCallback((listId: string, item: NewItem) => {
-    const newItem: MaterialItem = {
-      id: uid(),
-      name: item.name.trim(),
-      quantity: item.quantity && item.quantity > 0 ? item.quantity : 1,
-      unit: (item.unit ?? '').trim(),
-      checked: false,
-      note: item.note?.trim() || undefined,
-    };
-    if (!newItem.name) return;
-    setLists((prev) =>
-      prev.map((l) =>
-        l.id === listId
-          ? { ...l, items: [...l.items, newItem], updatedAt: Date.now() }
-          : l,
-      ),
-    );
+    const built = ops.buildItem(item, uid());
+    if (!built) return;
+    setLists((prev) => ops.addItem(prev, listId, built, Date.now()));
   }, []);
 
   const updateItem = useCallback(
     (listId: string, itemId: string, patch: Partial<MaterialItem>) => {
-      setLists((prev) =>
-        prev.map((l) =>
-          l.id === listId
-            ? {
-                ...l,
-                items: l.items.map((it) =>
-                  it.id === itemId ? { ...it, ...patch } : it,
-                ),
-                updatedAt: Date.now(),
-              }
-            : l,
-        ),
-      );
+      setLists((prev) => ops.updateItem(prev, listId, itemId, patch, Date.now()));
     },
     [],
   );
 
   const toggleItem = useCallback((listId: string, itemId: string) => {
-    setLists((prev) =>
-      prev.map((l) =>
-        l.id === listId
-          ? {
-              ...l,
-              items: l.items.map((it) =>
-                it.id === itemId ? { ...it, checked: !it.checked } : it,
-              ),
-              updatedAt: Date.now(),
-            }
-          : l,
-      ),
-    );
+    setLists((prev) => ops.toggleItem(prev, listId, itemId, Date.now()));
   }, []);
 
   const deleteItem = useCallback((listId: string, itemId: string) => {
-    setLists((prev) =>
-      prev.map((l) =>
-        l.id === listId
-          ? {
-              ...l,
-              items: l.items.filter((it) => it.id !== itemId),
-              updatedAt: Date.now(),
-            }
-          : l,
-      ),
-    );
+    setLists((prev) => ops.deleteItem(prev, listId, itemId, Date.now()));
   }, []);
 
   const value = useMemo<ListsContextValue>(
