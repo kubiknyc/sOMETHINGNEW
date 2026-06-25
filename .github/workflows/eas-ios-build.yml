@@ -21,11 +21,15 @@ jobs:
   ios:
     runs-on: ubuntu-latest
     steps:
+      # Actions are pinned to commit SHAs for supply-chain safety; the trailing
+      # comment notes the tag. Bump deliberately when upgrading.
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 20
 
@@ -33,9 +37,9 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: Set up EAS
-        uses: expo/expo-github-action@v8
+        uses: expo/expo-github-action@c7b66a9c327a43a8fa7c0158e7f30d6040d2481e # v8
         with:
-          eas-version: latest
+          eas-version: 20.3.0
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Build iOS
