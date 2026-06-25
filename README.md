@@ -28,6 +28,28 @@ Then open it on your phone:
 Or press `a` for an Android emulator / `i` for an iOS simulator if you have one
 set up. `npm run android` / `npm run ios` do the same.
 
+## Building an installable app
+
+Cloud builds use **EAS Build** (an Expo account is required; it's free for this).
+Config lives in `eas.json`; the app identifier is `com.kubiknyc.sitematerials`.
+
+```bash
+npm install -g eas-cli
+eas login
+eas build:configure        # one-time, links the project to your Expo account
+
+# Installable Android APK (sideload onto a device):
+eas build --profile preview --platform android
+
+# Store builds:
+eas build --profile production --platform android   # .aab for Play Store
+eas build --profile production --platform ios        # needs an Apple Developer account
+```
+
+EAS runs the native build in the cloud and gives you a download link / QR code —
+no local Android SDK or Xcode needed. For day-to-day development, `npx expo start`
+with Expo Go (above) is faster and needs no build.
+
 ## Tests
 
 ```bash
