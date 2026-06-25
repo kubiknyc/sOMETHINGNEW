@@ -14,14 +14,19 @@ export async function shareList(list: MaterialList): Promise<void> {
   });
 }
 
-/** Generate a PDF of the list and open the OS share sheet for it. */
+/**
+ * Generate a PDF of the list and open the OS share sheet for it.
+ * Throws if PDF generation fails or sharing isn't available on the device, so
+ * the caller can surface the error to the user.
+ */
 export async function exportListPdf(list: MaterialList): Promise<void> {
-  const { uri } = await Print.printToFileAsync({ html: listToHtml(list) });
-  if (await Sharing.isAvailableAsync()) {
-    await Sharing.shareAsync(uri, {
-      mimeType: 'application/pdf',
-      dialogTitle: list.name,
-      UTI: 'com.adobe.pdf',
-    });
+  if (!(await Sharing.isAvailableAsync())) {
+    throw new Error('Sharing is not available on this device.');
   }
+  const { uri } = await Print.printToFileAsync({ html: listToHtml(list) });
+  await Sharing.shareAsync(uri, {
+    mimeType: 'application/pdf',
+    dialogTitle: list.name,
+    UTI: 'com.adobe.pdf',
+  });
 }

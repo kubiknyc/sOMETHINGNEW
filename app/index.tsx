@@ -76,9 +76,15 @@ export default function ListsScreen() {
         }}
       />
 
+      {/* Disabled until storage has hydrated, so a list created mid-load
+          can't be clobbered when the saved lists arrive. */}
       <Pressable
-        style={({ pressed }) => [styles.fab, pressed && styles.pressed]}
+        style={({ pressed }) => [
+          styles.fab,
+          (pressed || loading) && styles.pressed,
+        ]}
         onPress={() => setModalVisible(true)}
+        disabled={loading}
       >
         <Text style={styles.fabText}>+ New list</Text>
       </Pressable>

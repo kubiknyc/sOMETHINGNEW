@@ -92,7 +92,7 @@ React Native / Expo imports, so the suite runs fast in a plain node environment.
 
 ## How it's built
 
-```
+```text
 app/
   _layout.tsx       Root stack navigator + state provider (expo-router)
   index.tsx         "My Sites" — all lists, create / open / delete

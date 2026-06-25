@@ -59,8 +59,16 @@ export default function ListDetailScreen() {
 
   const onShare = () => {
     Alert.alert('Share list', undefined, [
-      { text: 'Send as text', onPress: () => shareList(list) },
-      { text: 'Export PDF', onPress: () => exportListPdf(list) },
+      {
+        text: 'Send as text',
+        onPress: () =>
+          shareList(list).catch(() => Alert.alert('Could not share the list.')),
+      },
+      {
+        text: 'Export PDF',
+        onPress: () =>
+          exportListPdf(list).catch(() => Alert.alert('Could not export the PDF.')),
+      },
       { text: 'Cancel', style: 'cancel' },
     ]);
   };
