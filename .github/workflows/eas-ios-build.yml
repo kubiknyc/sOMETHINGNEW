@@ -45,7 +45,7 @@ jobs:
       # Creates/links the EAS project (writes the project id) so the build can
       # run non-interactively. Idempotent once the project exists.
       - name: Configure EAS project
-        run: eas init --non-interactive
+        run: eas init --non-interactive --force
 
       - name: Build iOS
         run: eas build --platform ios --profile ${{ inputs.profile }} --non-interactive --wait
