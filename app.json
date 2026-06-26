@@ -10,7 +10,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.kubiknyc.sitematerials"
+      "bundleIdentifier": "com.kubiknyc.sitematerials",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.kubiknyc.sitematerials",
