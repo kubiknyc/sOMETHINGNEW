@@ -47,9 +47,26 @@ jobs:
       - name: Configure EAS project
         run: eas init --non-interactive --force
 
+      # Write the App Store Connect API key (secret) to a file so EAS can use it
+      # to generate signing credentials and submit, with no interactive prompts.
+      - name: Write App Store Connect API key
+        env:
+          ASC_API_KEY_P8: ${{ secrets.ASC_API_KEY_P8 }}
+        run: |
+          printf '%s' "$ASC_API_KEY_P8" > "$RUNNER_TEMP/asc-api-key.p8"
+          chmod 600 "$RUNNER_TEMP/asc-api-key.p8"
+
       - name: Build iOS
+        env:
+          EXPO_ASC_API_KEY_PATH: ${{ runner.temp }}/asc-api-key.p8
+          EXPO_ASC_KEY_ID: Y4X9CMHABN
+          EXPO_ASC_ISSUER_ID: 36cf25d9-1ee0-4c93-af03-1916223fa9a4
         run: eas build --platform ios --profile ${{ inputs.profile }} --non-interactive --wait
 
       - name: Submit to TestFlight
         if: ${{ inputs.submit && inputs.profile == 'production' }}
+        env:
+          EXPO_ASC_API_KEY_PATH: ${{ runner.temp }}/asc-api-key.p8
+          EXPO_ASC_KEY_ID: Y4X9CMHABN
+          EXPO_ASC_ISSUER_ID: 36cf25d9-1ee0-4c93-af03-1916223fa9a4
         run: eas submit --platform ios --profile production --latest --non-interactive
